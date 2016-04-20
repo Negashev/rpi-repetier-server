@@ -8,9 +8,16 @@ RUN apt-get update \
 RUN wget --output-document repetier-server.deb -q http://download.repetier.com/files/server/debian-armel/Repetier-Server-0.70.1-Linux.deb
 RUN dpkg -i repetier-server.deb
 
+RUN touch /var/lib/Repetier-Server/logs/server.log
+
 VOLUME /var/lib/Repetier-Server
+
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
 
 EXPOSE 3344
 
-ENTRYPOINT service RepetierServer start && bash
+ENTRYPOINT ["/entrypoint.sh"]
+
 CMD tail -f /var/lib/Repetier-Server/logs/server.log
